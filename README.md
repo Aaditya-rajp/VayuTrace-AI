@@ -39,8 +39,8 @@ VayuTrace enforces strict repository hygiene — API keys never touch version co
 **1. Clone the repository and install dependencies:**
 
 ```bash
-git clone https://github.com/yourusername/vayuTrace-ai.git
-cd vayuTrace-ai
+git clone https://github.com/yourusername/vayuTrace-AI.git
+cd vayuTrace-AI
 pip install -r requirements.txt
 ```
 
