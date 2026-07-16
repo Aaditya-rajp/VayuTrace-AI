@@ -1,14 +1,14 @@
-# 🌬️ VayuSense AI
+# 🌬️ VayuTrace AI
 
 **Enterprise atmospheric intelligence, spatial source attribution, and multi-agent emergency response.**
 
-Passive environmental dashboards only tell you what the air quality is. VayuSense AI is an active geospatial engine built for city administrators to determine *why* the air is toxic, *where* it is coming from, and *how* to deploy immediate public health interventions.
+Passive environmental dashboards only tell you what the air quality is. VayuTrace AI is an active geospatial engine built for city administrators to determine *why* the air is toxic, *where* it is coming from, and *how* to deploy immediate public health interventions.
 
 ---
 
 ## 🚀 The Architecture
 
-VayuSense is built on a single-source-of-truth data-fusion pipeline, keeping satellite physics and LLM generation synchronized against one shared atmospheric state.
+VayuTrace is built on a single-source-of-truth data-fusion pipeline, keeping satellite physics and LLM generation synchronized against one shared atmospheric state.
 
 1. **The Telemetry Layer** — Fuses ground-sensor pollution data (WAQI) with live meteorological satellite feeds (Open-Meteo). Includes automatic fallback: if a live wind reading fails, the system degrades to a cached macro-vector instead of crashing.
 2. **The Physics Layer (Gaussian Dispersion)** — Maps live wind vectors and calculates downwind dispersion plumes from known industrial zones using Pasquill–Gifford Gaussian plume mathematics (Stability Class D).
@@ -34,13 +34,13 @@ VayuSense is built on a single-source-of-truth data-fusion pipeline, keeping sat
 
 ### Local Installation
 
-VayuSense enforces strict repository hygiene — API keys never touch version control.
+VayuTrace enforces strict repository hygiene — API keys never touch version control.
 
 **1. Clone the repository and install dependencies:**
 
 ```bash
-git clone https://github.com/yourusername/vayusense-ai.git
-cd vayusense-ai
+git clone https://github.com/yourusername/vayuTrace-ai.git
+cd vayuTrace-ai
 pip install -r requirements.txt
 ```
 
