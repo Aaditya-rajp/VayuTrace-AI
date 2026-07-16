@@ -22,8 +22,11 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-st.set_page_config(page_title="VayuSense AI | Urban Air Intelligence", page_icon="🌬️", layout="wide")
-st_autorefresh(interval=1800 * 1000, key="vayusense_refresh")
+# UPDATE 1: Browser Tab Title
+st.set_page_config(page_title="VayuTrace AI | Urban Air Intelligence", page_icon="🌬️", layout="wide")
+
+# UPDATE 2: Autorefresh Cache Key
+st_autorefresh(interval=1800 * 1000, key="vayutrace_refresh")
 
 st.markdown(
     """
@@ -202,10 +205,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# UPDATE 3: Hero Title 
 st.markdown(
     """
     <div class="vayu-hero">
-        <div class="vayu-title">Vayu<span>Sense</span> AI</div>
+        <div class="vayu-title">Vayu<span>Trace</span> AI</div>
         <div class="vayu-subtitle">Enterprise atmospheric intelligence. Real-time telemetry, spatial attribution, and multi-agent GRAP policy enforcement for Delhi.</div>
     </div>
     """,
