@@ -68,6 +68,41 @@ WAQI_API_KEY = "your_world_air_quality_index_key_here"
 
 The application detects the cloud environment automatically and reads credentials from Streamlit's secrets manager — no code changes required between local and deployed environments.
 
+
+graph LR
+    subgraph 1. Data Ingestion
+        A[WAQI Telemetry<br/>Micro-Local Ground Sensors]
+        B[Open-Meteo CAMS<br/>Macro-Satellite 10km Grid]
+    end
+
+    subgraph 2. The Physics Engine
+        C[Deterministic Synthetic Downscaling<br/>NumPy Coordinate Seeding]
+        D[Dual-Layer Gaussian Dispersion<br/>Ambient Proximity + Wind Vectors]
+    end
+
+    subgraph 3. The AI Engine
+        E[Facebook Prophet ML<br/>72h Predictive Modeling]
+        F[Gemini Multi-Agent System<br/>GRAP Policy Enforcement]
+    end
+
+    subgraph 4. The Presentation Layer
+        G[Streamlit Enterprise Cloud<br/>Dynamic Geospatial Mapping]
+    end
+
+    %% Data Flow Routing
+    B -->|Macro Regional Array| C
+    A -->|Live Anchor PM2.5| C
+    C -->|Localized Tensors| E
+    
+    A -->|AQI & Coordinates| D
+    D -->|Attribution String| F
+    
+    E -->|Predictive Graph| G
+    F -->|Hindi/English JSON| G
+
+    classDef tech fill:#1C1812,stroke:#E8A33D,stroke-width:2px,color:#EDE6D6;
+    class A,B,C,D,E,F,G tech;
+
 ---
 
 *Built for the evaluation of urban environmental response systems.*
