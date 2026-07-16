@@ -75,21 +75,21 @@ graph LR
         B[Open-Meteo CAMS<br/>Macro-Satellite 10km Grid]
     end
 
-    subgraph 2. The Physics Engine
+  subgraph 2. The Physics Engine
         C[Deterministic Synthetic Downscaling<br/>NumPy Coordinate Seeding]
         D[Dual-Layer Gaussian Dispersion<br/>Ambient Proximity + Wind Vectors]
     end
 
-    subgraph 3. The AI Engine
+  subgraph 3. The AI Engine
         E[Facebook Prophet ML<br/>72h Predictive Modeling]
         F[Gemini Multi-Agent System<br/>GRAP Policy Enforcement]
     end
 
-    subgraph 4. The Presentation Layer
+  subgraph 4. The Presentation Layer
         G[Streamlit Enterprise Cloud<br/>Dynamic Geospatial Mapping]
     end
 
-    %% Data Flow Routing
+  %% Data Flow Routing
     B -->|Macro Regional Array| C
     A -->|Live Anchor PM2.5| C
     C -->|Localized Tensors| E
