@@ -191,7 +191,7 @@ if st.sidebar.button("🧹 Clear System Cache", width="stretch"):
     st.rerun()
 if st.sidebar.button("🔄 Force Refresh", width="stretch"):
     st.rerun()
-st.sidebar.link_button("📂 View on GitHub", "https://github.com/", width="stretch")
+st.sidebar.link_button("📂 View on GitHub", "https://github.com/Aaditya-rajp/VayuTrace-AI.git", width="stretch")
 
 st.markdown(
     f"""
