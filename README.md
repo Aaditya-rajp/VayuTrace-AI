@@ -110,7 +110,7 @@ graph LR
     class C,D physics;
     class E,F intel;
     class G ui;
-    ---
+    ...
 ```
 
 ---
