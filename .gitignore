@@ -11,3 +11,7 @@ Thumbs.db
 .codex/
 *.db
 *.sqlite
+.env.*
+.vscode/
+.idea/
+*.pkl
