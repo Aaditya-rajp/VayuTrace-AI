@@ -35,8 +35,16 @@ graph LR
     E -->|Predictive Graph| G
     F -->|Hindi and English JSON| G
  
-    classDef tech fill:#1C1812,stroke:#E8A33D,stroke-width:2px,color:#EDE6D6;
-    class A,B,C,D,E,F,G tech;
+    %% Enterprise Styling
+    classDef ext fill:#1a1a1a,stroke:#555,stroke-width:1px,color:#aaa,stroke-dasharray: 5 5;
+    classDef phys fill:#1C1812,stroke:#E8A33D,stroke-width:2px,color:#EDE6D6;
+    classDef intel fill:#1C1812,stroke:#7FB069,stroke-width:2px,color:#EDE6D6;
+    classDef front fill:#14120F,stroke:#38BDF8,stroke-width:2px,color:#EDE6D6;
+ 
+    class A,B ext;
+    class C,D phys;
+    class E,F intel;
+    class G front;
 ```
 
 ---
