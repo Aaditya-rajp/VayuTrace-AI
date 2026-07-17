@@ -3,6 +3,41 @@
 **Enterprise atmospheric intelligence, spatial source attribution, and multi-agent emergency response.**
 
 Passive environmental dashboards only tell you what the air quality is. VayuTrace AI is an active geospatial engine built for city administrators to determine *why* the air is toxic, *where* it is coming from, and *how* to deploy immediate public health interventions.
+```mermaid
+graph LR
+    subgraph ing["1. Data Ingestion"]
+        A["WAQI Telemetry<br/>Micro-Local Ground Sensors"]
+        B["Open-Meteo CAMS<br/>Macro-Satellite 10km Grid"]
+    end
+ 
+    subgraph physics["2. The Physics Engine"]
+        C["Deterministic Synthetic Downscaling<br/>NumPy Coordinate Seeding"]
+        D["Dual-Layer Gaussian Dispersion<br/>Ambient Proximity + Wind Vectors"]
+    end
+ 
+    subgraph ai["3. The AI Engine"]
+        E["Prophet ML (Meta)<br/>72h Predictive Modeling"]
+        F["Gemini Multi-Agent System<br/>GRAP Policy Enforcement"]
+    end
+ 
+    subgraph ui["4. The Presentation Layer"]
+        G["Streamlit Enterprise Cloud<br/>Dynamic Geospatial Mapping"]
+    end
+ 
+    %% Data Flow Routing
+    B -->|Macro Regional Array| C
+    A -->|Live Anchor PM2.5| C
+    C -->|Localized Tensors| E
+ 
+    A -->|AQI and Coordinates| D
+    D -->|Attribution String| F
+ 
+    E -->|Predictive Graph| G
+    F -->|Hindi and English JSON| G
+ 
+    classDef tech fill:#1C1812,stroke:#E8A33D,stroke-width:2px,color:#EDE6D6;
+    class A,B,C,D,E,F,G tech;
+```
 
 ---
 
@@ -67,50 +102,7 @@ WAQI_API_KEY = "your_world_air_quality_index_key_here"
 ```
 
 The application detects the cloud environment automatically and reads credentials from Streamlit's secrets manager — no code changes required between local and deployed environments.
-``` mermaid
-graph LR
-    %% Subgraphs for System Boundaries
-    subgraph 1. External Telemetry
-        A[WAQI Network API<br/>Micro-Local Sensors]
-        B[Open-Meteo CAMS<br/>Copernicus 10km Grid]
-    end
 
-    subgraph 2. Physics Matrix
-        C[Synthetic Downscaling<br/>NumPy Deterministic Seeding]
-        D[Dual-Layer Dispersion<br/>Gaussian + Ambient Proximity]
-    end
-
-    subgraph 3. AI Inference Layer
-        E[Facebook Prophet ML<br/>72h Predictive Modeling]
-        F[Gemini LLM Protocol<br/>Multi-Agent GRAP Policy]
-    end
-
-    subgraph 4. Client Environment
-        G[Streamlit UI<br/>Dynamic Geospatial State]
-    end
-
-    %% Data Flow with Specific Payloads
-    B -- "Macro Array [10km]" --> C
-    A -- "Live PM2.5 Anchor" --> C
-    C -- "Turbulence Tensors (ds, y)" --> E
-    
-    A -- "AQI + Wind Vectors" --> D
-    D -- "Attribution String" --> F
-    
-    E -- "Predictive DataFrame" --> G
-    F -- "Translation Payload [JSON]" --> G
-
-    %% Enterprise Styling
-    classDef ext fill:#1a1a1a,stroke:#555,stroke-width:1px,color:#aaa,stroke-dasharray: 5 5;
-    classDef physics fill:#1C1812,stroke:#E8A33D,stroke-width:2px,color:#EDE6D6;
-    classDef intel fill:#1C1812,stroke:#7FB069,stroke-width:2px,color:#EDE6D6;
-    classDef ui fill:#14120F,stroke:#38BDF8,stroke-width:2px,color:#EDE6D6;
-    
-    class A,B ext;
-    class C,D physics;
-    class E,F intel;
-    class G ui;
-    ...
 ```
 
 ---
