@@ -117,6 +117,9 @@ def fetch_waqi_map_data() -> pd.DataFrame:
             logging.error("WAQI payload format invalid: 'data' is not a list.")
             return pd.DataFrame()
 
+        # TEMP DEBUG — remove this line once we've diagnosed the parsing issue
+        logging.info("WAQI raw sample (first 2 rows): %s", data_list[:2])
+
         rows = [parse_station(item) for item in data_list if isinstance(item, dict)]
         valid_rows = [row for row in rows if row is not None]
 
