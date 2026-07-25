@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from datetime import datetime
 from typing import Any
 
@@ -12,13 +13,14 @@ from urllib3.util.retry import Retry
 
 from config import settings
 
-WAQI_BOUNDS_URL = "https://api.waqi.info/map/bounds/"
+WAQI_BOUNDS_URL = "https://api.waqi.info/v2/map/bounds/"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 def get_session() -> requests.Session:
     session = requests.Session()
+    # Backoff retry strategy to prevent silent network failure drops
     retries = Retry(total=3, backoff_factor=0.6, status_forcelist=[429, 500, 502, 503, 504])
     adapter = HTTPAdapter(max_retries=retries, pool_connections=20, pool_maxsize=20)
     session.mount("https://", adapter)
@@ -60,6 +62,7 @@ def parse_station(row: dict[str, Any]) -> dict[str, Any] | None:
     latitude = pd.to_numeric(row.get("lat"), errors="coerce")
     longitude = pd.to_numeric(row.get("lon"), errors="coerce")
 
+    # Filter out corrupted or incomplete station records
     if pd.isna(aqi) or pd.isna(latitude) or pd.isna(longitude):
         return None
 
@@ -78,12 +81,26 @@ def parse_station(row: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
-@st.cache_data(ttl=900)
+@st.cache_data(ttl=300, show_spinner=False)
 def fetch_waqi_map_data() -> pd.DataFrame:
     bounds = settings.city_bounds
-    token = settings.waqi_api_key.get_secret_value()
-    if not token:
+
+    # Multi-tier token resolution: settings -> os.getenv -> st.secrets
+    token = ""
+    try:
+        if hasattr(settings, "waqi_api_key") and hasattr(settings.waqi_api_key, "get_secret_value"):
+            token = settings.waqi_api_key.get_secret_value()
+    except Exception:
+        pass
+
+    # Reject empty or hardcoded demo keys that cap results to 8 sensors
+    if not token or token.strip().lower() == "demo":
+        token = os.getenv("WAQI_API_KEY", "") or getattr(st.secrets, "WAQI_API_KEY", "")
+
+    if not token or token.strip().lower() == "demo":
+        logging.error("WAQI API key unavailable or evaluates to 'demo'. Returning empty DataFrame.")
         return pd.DataFrame()
+
     params = {
         "latlng": f"{bounds['lat_min']},{bounds['lon_min']},{bounds['lat_max']},{bounds['lon_max']}",
         "token": token,
@@ -98,15 +115,23 @@ def fetch_waqi_map_data() -> pd.DataFrame:
             logging.error("WAQI API returned non-ok status: %s", payload)
             return pd.DataFrame()
 
-        rows = [parse_station(item) for item in payload.get("data", [])]
-        df = pd.DataFrame([row for row in rows if row is not None])
+        data_list = payload.get("data", [])
+        if not isinstance(data_list, list):
+            logging.error("WAQI payload format invalid: 'data' is not a list.")
+            return pd.DataFrame()
 
-        if df.empty:
-            return df
+        rows = [parse_station(item) for item in data_list if isinstance(item, dict)]
+        valid_rows = [row for row in rows if row is not None]
 
+        if not valid_rows:
+            logging.warning("WAQI query returned zero valid parsed stations.")
+            return pd.DataFrame()
+
+        df = pd.DataFrame(valid_rows)
         df = df.dropna(subset=["aqi", "latitude", "longitude"])
         df = df.sort_values("aqi", ascending=False).reset_index(drop=True)
         return df[["uid", "name", "aqi", "latitude", "longitude", "category", "source_hint", "last_updated"]]
+
     except Exception as exc:
         logging.error("WAQI telemetry fetch failed: %s", exc, exc_info=True)
         return pd.DataFrame()
