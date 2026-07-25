@@ -13,7 +13,7 @@ from urllib3.util.retry import Retry
 
 from config import settings
 
-WAQI_BOUNDS_URL = "https://api.waqi.info/v2/map/bounds/"
+WAQI_BOUNDS_URL = "https://api.waqi.info/map/bounds/"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -62,7 +62,6 @@ def parse_station(row: dict[str, Any]) -> dict[str, Any] | None:
     latitude = pd.to_numeric(row.get("lat"), errors="coerce")
     longitude = pd.to_numeric(row.get("lon"), errors="coerce")
 
-    # Filter out corrupted or incomplete station records
     if pd.isna(aqi) or pd.isna(latitude) or pd.isna(longitude):
         return None
 
@@ -85,7 +84,6 @@ def parse_station(row: dict[str, Any]) -> dict[str, Any] | None:
 def fetch_waqi_map_data() -> pd.DataFrame:
     bounds = settings.city_bounds
 
-    # Multi-tier token resolution: settings -> os.getenv -> st.secrets
     token = ""
     try:
         if hasattr(settings, "waqi_api_key") and hasattr(settings.waqi_api_key, "get_secret_value"):
@@ -93,7 +91,6 @@ def fetch_waqi_map_data() -> pd.DataFrame:
     except Exception:
         pass
 
-    # Reject empty or hardcoded demo keys that cap results to 8 sensors
     if not token or token.strip().lower() == "demo":
         token = os.getenv("WAQI_API_KEY", "") or getattr(st.secrets, "WAQI_API_KEY", "")
 
